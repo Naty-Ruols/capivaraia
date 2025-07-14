@@ -1,0 +1,15 @@
+
+[
+  {
+    "id": 1,
+    "username": "admin",
+    "email": "admin@exemplo.com",
+    "password_hash": "..."
+  },
+  {
+    "id": 2,
+    "username": "usuario",
+    "email": "usuario@exemplo.com",
+    "password_hash": "..."
+  }
+]

@@ -1,6 +1,7 @@
+// app/signup/page.tsx
 "use client";
 
-import { useState, ChangeEvent } from "react"; // Importamos o tipo 'ChangeEvent'
+import { useState, ChangeEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Input, SubmitButton } from "@/components";
@@ -78,7 +79,6 @@ const SignupPage = () => {
             onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
             disabled={loading}
           />
-          {/* A CORREÇÃO ESTAVA AQUI */}
           <Input 
             type="password"
             placeholder="Confirme a senha"

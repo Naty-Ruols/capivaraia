@@ -1,74 +1,51 @@
-// Credentials data
-const credentials = {
-  users: [
-    {
-      username: "admin",
-      password: "admin123",
-      email: "admin@example.com",
-    },
-    {
-      username: "user",
-      password: "user123",
-      email: "user@example.com",
-    },
-    {
-      username: "teste",
-      password: "teste123",
-      email: "teste@example.com",
-    },
-  ],
-};
+// lib/auth.ts
+"use client";
 
-export interface User {
-  username: string;
-  password: string;
-  email: string;
-}
+import users from './users.json';
+// A importação do tipo 'User' foi removida, pois não era usada aqui.
 
-export const authenticateUser = async (
-  username: string,
-  password: string
-): Promise<boolean> => {
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-  const user = credentials.users.find(
-    (u) => u.username === username && u.password === password
-  );
+export const signUp = async (username: string, email: string, password: string): Promise<{ success: boolean; message: string }> => {
+  await delay(1500);
 
-  return !!user;
-};
-
-export const registerUser = async (
-  username: string,
-  password: string,
-  email: string
-): Promise<boolean> => {
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  // Check if user already exists
-  const existingUser = credentials.users.find((u) => u.username === username);
-  if (existingUser) {
-    return false;
+  if (!username || !email || !password) {
+    return { success: false, message: 'Todos os campos são obrigatórios.' };
   }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return { success: false, message: 'Formato de e-mail inválido.' };
+  }
+  const existingUser = users.find(user => user.username === username || user.email === email);
+  if (existingUser) {
+    return { success: false, message: 'Nome de usuário ou e-mail já cadastrado.' };
+  }
+  console.log('Novo usuário cadastrado (simulado):', { id: Math.random(), username, email });
+  return { success: true, message: 'Usuário cadastrado com sucesso!' };
+};
 
-  // In a real app, you would save to database
-  // For this demo, we'll just return true
-  return true;
+export const authenticateUser = async (email: string, password: string): Promise<{ success: boolean; message: string }> => {
+  await delay(1000);
+
+  if (!email || !password) {
+    return { success: false, message: 'E-mail e senha são obrigatórios.' };
+  }
+  const user = users.find(u => u.email === email);
+  if (!user) {
+    return { success: false, message: 'Credenciais inválidas.' };
+  }
+  localStorage.setItem('auth_token', 'simulated_jwt_token_for_' + user.email);
+  console.log('Usuário logado (simulado):', { email: user.email });
+  return { success: true, message: 'Login bem-sucedido!' };
 };
 
 export const isAuthenticated = (): boolean => {
-  if (typeof window === "undefined") return false;
-  return !!localStorage.getItem("auth_token");
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('auth_token');
+    return !!token;
+  }
+  return false;
 };
 
-export const login = (token: string): void => {
-  if (typeof window === "undefined") return;
-  localStorage.setItem("auth_token", token);
-};
-
-export const logout = (): void => {
-  if (typeof window === "undefined") return;
-  localStorage.removeItem("auth_token");
-};
+// Exporta a mesma função com o nome 'login' para compatibilidade
+export const login = authenticateUser;
