@@ -2,6 +2,8 @@
 
 Este projeto foi desenvolvido como parte do processo seletivo para a vaga de Estágio Frontend e representa meu primeiro mergulho prático no desenvolvimento com React e Next.js.
 
+![Diagrama do Projeto](./assets/diagrama.jpg)
+
 
 ## Uma Jornada de Aprendizado Intenso
 
